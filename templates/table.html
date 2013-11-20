@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+{% block title %} SmartTag Live Dashboard {% endblock %}
+{% block table %}
+    <div class="container">
+      <h1>SmartTag Live Dashboard</h1>
+      <p>This table is automatically updated when new SmartTag occurrences are detected.</p>
+      <a class="btn" href="#"><i class="icon-refresh"></i> Refresh</a>
+      <br><br>
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Epoch</th>
+            <th>Date</th>
+            <th>Tag ID</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for tag in tags %}
+          <tr>
+            <td>{{tag.id}}</td>
+            <td>{{tag.epoch}}</td>
+            <td>{{tag.time}}</td>
+            <td>{{tag.tag}}</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div> <!-- /container -->
+{% endblock %}
+
