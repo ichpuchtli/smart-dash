@@ -21,6 +21,6 @@ def close_db(error):
 @app.route('/')
 def show_table():
     db = get_db()
-    cur = db.execute('select * from tags')
-    tags = cur.fetchall()
-    return render_template('table.html', tags=tags)
+    cursor = db.execute('select * from tags')
+    rows = cursor.fetchall()
+    return render_template('table.html', tags=rows)
