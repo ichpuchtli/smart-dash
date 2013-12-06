@@ -1,31 +1,67 @@
 {% extends "layout.html" %}
-{% block title %} SmartTag Live Dashboard {% endblock %}
-{% block table %}
-    <div class="container">
-      <h1>SmartTag Live Dashboard</h1>
-      <p>This table is automatically updated when new SmartTag occurrences are detected.</p>
-      <a class="btn" href="#"><i class="icon-refresh"></i> Refresh</a>
-      <br><br>
-      <table class="table table-hover">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Epoch</th>
-            <th>Date</th>
-            <th>Tag ID</th>
-          </tr>
-        </thead>
-        <tbody>
-        {% for tag in tags %}
-          <tr>
-            <td>{{tag.id}}</td>
-            <td>{{tag.epoch}}</td>
-            <td>{{tag.time}}</td>
-            <td>{{tag.tag}}</td>
-          </tr>
-        {% endfor %}
-        </tbody>
-      </table>
-    </div> <!-- /container -->
+{% block nav %}
+<li class="active"><a href="#">Tags</a></li>
+<li><a href="charts">Charts</a></li>
+<li><a href="admin">Admin</a></li>
+{% endblock %}
+
+{% block js %}
+<script type="text/javascript">
+$('#refresh-btn').click(function(){
+  $(this).button('loading')
+});
+
+  $(function() {
+    var submit_form = function(e) {
+      $.getJSON('/tags', {}, function(data) {
+        var newHtml = '<thead><th>#</th><th>Date</th><th>Tag ID</th></thead>';
+
+        for(var i = 0; i < data.result.length; i++){
+          newHtml += '<tr>';
+          newHtml += '<td>' + data.result[i][0] + '</td>';
+          newHtml += '<td>' + data.result[i][2] + '</td>';
+          newHtml += '<td>' + data.result[i][3] + '</td>';
+          newHtml += '</tr>';
+        }
+
+        $('#tag-table').html(newHtml);
+        $('#refresh-btn').button('reset')
+
+      });
+      return false;
+    };
+
+    $('#refresh-btn').bind('click', submit_form);
+
+    setInterval(submit_form, 3000);
+
+    submit_form();
+
+  });
+
+</script>
+{% endblock %}
+
+{% block body %}
+<div class="page-header">
+  <h1>SmartTag Live Dashboard <small> This table is automatically updated.</small></h1>
+</div>
+<a href="#"><button id="refresh-btn" class="btn btn-primary" data-loading-text="Loading...">
+<span class="glyphicon glyphicon-refresh"></span> Refresh</button></a>
+
+<div class="btn-group">
+  <button class="btn btn-success dropdown-toggle" data-toggle="dropdown">
+    <span class="glyphicon glyphicon-download-alt"></span> Download
+    <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu">
+    <li><a href="/download/tags.zip"><span class="glyphicon glyphicon-download-alt"></span> Download ZIP</a></li>
+    <li><a href="/download/tags.xls"><span class="glyphicon glyphicon-download-alt"></span> Download Excel</a></li>
+    <li><a href="mailto:email@example.com"><span class="glyphicon glyphicon-envelope"></span> Email ZIP</a></li>
+  </ul>
+</div>
+<br />
+<br />
+<table id="tag-table" class="table table-bordered"></table>
 {% endblock %}
 

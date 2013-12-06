@@ -1,0 +1,92 @@
+{% extends "layout.html" %}
+{% block nav %}
+<li><a href="table">Tags</a></li>
+<li class="active"><a href="#">Charts</a></li>
+<li><a href="admin">Admin</a></li>
+{% endblock %}
+
+{% block js %}
+<script src="../static/js/jquery.flot.threshold.js"></script>
+<script type="text/javascript">
+
+var timer;
+
+$(function() {
+
+var d1 = [];
+
+var submit_form = function(e) {
+  $.getJSON('/rssi', {}, function(data) {
+    d1 = data.result;
+    plot();
+  });
+  return false;
+};
+
+
+var start_rssi = function(e) {
+  $.getJSON('/start_rssi', {}, function(data) { });
+  timer = setInterval(submit_form, 1000);
+
+  return false;
+};
+
+var stop_rssi = function(e) {
+  $.getJSON('/stop_rssi', {}, function(data) { });
+  $('#start-rssi').button('reset');
+  clearInterval(timer);
+  return false;
+};
+
+function plot(){
+$.plot("#graph", [ { data: d1, threshold: { below: 2.0, color: "rgb(20,200,30)"}, label: "RSSI (V)", points: {show: false},
+  lines: { show: true, fill: true } } ], { series : { shadowSize: 0}, yaxis : { min : 0, max: 3},
+  xaxis : { show: false} } );
+}
+
+var clear_rssi = function(e) {
+  $.getJSON('/clear_rssi', {}, function(data) { });
+  d1 = [];
+  plot();
+  return false;
+};
+
+plot();
+
+window.onresize = plot;
+
+submit_form();
+
+$('#start-rssi').click(function(){
+  $(this).button('loading')
+});
+
+$('#start-rssi').bind('click', start_rssi);
+$('#stop-rssi').bind('click', stop_rssi);
+$('#clear-rssi').bind('click', clear_rssi);
+
+});
+</script>
+{% endblock %}
+
+{% block body %}
+<fieldset>
+<legend>RSSI</legend>
+  <a href="#"><button id="start-rssi" class="btn btn-default" data-loading-text="Running..."><span
+        class="glyphicon glyphicon-play"></span> Start</button></a>
+
+  <a href="#"><button id="stop-rssi" class="btn btn-default"><span class="glyphicon glyphicon-stop"></span> Stop</button></a>
+
+  <a href="#" class="pull-right"><button id="clear-rssi" class="btn btn-danger"><span class="glyphicon glyphicon-ban-circle"></span> Clear</button></a>
+
+<div id="graph" style="margin:0 auto;width:100%;height:300px"></div>
+<br />
+<legend>Uptime</legend>
+  <pre>{{uptime}}</pre>
+<legend>Time & Data</legend>
+  <pre>{{timedate}}</pre>
+<legend>Who</legend>
+  <pre>{{who}}</pre>
+</fieldset>
+{% endblock %}
+

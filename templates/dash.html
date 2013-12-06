@@ -1,0 +1,98 @@
+{% extends "layout.html" %}
+{% block nav %}
+<li><a href="table">Tags</a></li>
+<li><a href="charts">Charts</a></li>
+<li><a href="admin">Admin</a></li>
+{% endblock %}
+{% block js %}
+<script src="../static/js/jquery.flot.pie.js"></script>
+<script type="text/javascript">
+$(function() {
+
+  var data = [
+   { label: "% Free", data: 203},
+   { label: "% Used", data: 708}
+  ]; 
+
+  function plot(){
+    $.plot("#ram-pie-chart", data, {
+      series: {
+        pie: {
+          show: true,
+        }
+      }
+    });
+  }
+
+plot();
+
+});
+</script>
+{% endblock %}
+{% block body %}
+<div class="page-header">
+  <h1>SmartTag Live Dashboard<small> System Overview</small></h1>
+</div>
+
+<div class="panel panel-success">
+  <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" href="#collapseSerial">
+          Serial Interface Health <span class="glyphicon glyphicon-ok"></span>
+        </a>
+      </h4>
+  </div>
+    <div id="collapseSerial" class="panel-collapse collapse">
+      <div class="panel-body">
+         Memory/ Service Info here 
+      </div>
+    </div>
+</div>
+
+<div class="panel panel-success">
+  <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" href="#collapseReader">
+          RFID Reader Health <span class="glyphicon glyphicon-ok"></span>
+        </a>
+      </h4>
+  </div>
+    <div id="collapseReader" class="panel-collapse collapse">
+      <div class="panel-body">
+         Memory/ Service Info here
+      </div>
+    </div>
+</div>
+
+<div class="panel panel-success">
+  <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" href="#collapseOS">
+          OS Health (RAM, DISK) <span class="glyphicon glyphicon-ok"></span>
+        </a>
+      </h4>
+  </div>
+    <div id="collapseOS" class="panel-collapse collapse">
+      <div class="panel-body">
+        <div id="ram-pie-chart" style="width:200px;height:200px"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel panel-danger">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" href="#collapseInternet">
+          Internet Health (Not Required) 
+        </a>
+      </h4>
+    </div>
+    <div id="collapseInternet" class="panel-collapse collapse">
+      <div class="panel-body">
+      </div>
+    </div>
+  </div>
+
+</div>
+{% endblock %}
+

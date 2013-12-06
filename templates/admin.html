@@ -1,0 +1,56 @@
+{% extends "layout.html" %}
+{% block title %} SmartTag Live Dashboard {% endblock %}
+{% block nav %}
+<li><a href="table">Tags</a></li>
+<li><a href="charts">Charts</a></li>
+<li class="active"><a href="admin">Admin</a></li>
+<li><a href="logout">Logout</a></li>
+{% endblock %}
+
+{% block js %}
+<script type="text/javascript">
+$('button').click(function(){
+  $(this).button('loading')
+});
+
+$('submit-form-btn').click(function(){
+  $('upload-form').submit();
+});
+
+</script>
+{% endblock %}
+
+{% block body %}
+<div class="page-header">
+  <h1>SmartTag Live Dashboard <small>Please Remember to log out.</small></h1>
+</div>
+  <fieldset>
+    <legend>Upload CSV/Excel Spreadsheet of Registered Tags</legend>
+    <form class="form" role="form" id="upload-form" action="upload" method="post" enctype="multipart/form-data">
+      <div class="form-group">
+        <input type="file" id="upload-csv" name="file">
+      </div>
+        <button id='submit-form-btn' class="btn btn-primary" data-loading-text="Loading..."><span
+        class="glyphicon glyphicon-file"></span> Upload CSV</button>
+    </form>
+  </fieldset>
+  <br />
+  <fieldset>
+    <legend>Registered Tags</legend>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Tag ID</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>1</td>
+        <td>09759012231</td>
+      </tr>
+    </tbody>
+  </table>
+  </fieldset>
+{% endblock %}
+
